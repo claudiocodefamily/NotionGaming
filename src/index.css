@@ -1,0 +1,99 @@
+@import 'tailwindcss';
+
+/* Paleta inspirada en la referencia retro: fondo nocturno y bordes de color tipo arcade */
+@theme {
+  --color-night: #0b0a1f;
+  --color-panel: #14123a;
+  --color-panel-2: #1d1a4d;
+  --color-edge: #2e2a6b;
+  --color-ink: #f1eefe;
+  --color-ink-dim: #a29fd0;
+  --color-purple: #b26bff;
+  --color-cyan: #38d9f5;
+  --color-green: #4ade80;
+  --color-amber: #fbbf24;
+  --color-red: #f8566b;
+  --font-pixel: 'Press Start 2P', ui-monospace, monospace;
+  --font-retro: 'VT323', ui-monospace, monospace;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-night);
+  background-image:
+    radial-gradient(circle at 20% 10%, rgb(178 107 255 / 0.18), transparent 40%),
+    radial-gradient(circle at 85% 90%, rgb(56 217 245 / 0.12), transparent 40%);
+  background-attachment: fixed;
+  color: var(--color-ink);
+  font-family: var(--font-retro);
+  font-size: 22px;
+  line-height: 1.2;
+  -webkit-font-smoothing: none;
+}
+
+/* estrellas pixeladas de fondo */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(1px 1px at 10% 20%, #fff8 50%, transparent 51%),
+    radial-gradient(1px 1px at 30% 70%, #fff6 50%, transparent 51%),
+    radial-gradient(2px 2px at 55% 15%, #fff5 50%, transparent 51%),
+    radial-gradient(1px 1px at 75% 40%, #fff7 50%, transparent 51%),
+    radial-gradient(2px 2px at 90% 80%, #fff4 50%, transparent 51%),
+    radial-gradient(1px 1px at 45% 90%, #fff6 50%, transparent 51%);
+}
+
+/* panel con borde de color y sombra pixel sólida (sin desenfoque) */
+.pixel-panel {
+  background: var(--color-panel);
+  border: 3px solid var(--panel-color, var(--color-purple));
+  box-shadow:
+    0 0 0 3px var(--color-night),
+    6px 6px 0 0 rgb(0 0 0 / 0.55),
+    0 0 18px -4px var(--panel-color, var(--color-purple));
+}
+
+.pixel-btn {
+  font-family: var(--font-pixel);
+  border: 3px solid currentColor;
+  box-shadow: 4px 4px 0 0 rgb(0 0 0 / 0.6);
+  transition: transform 60ms, box-shadow 60ms;
+}
+.pixel-btn:active {
+  transform: translate(3px, 3px);
+  box-shadow: 1px 1px 0 0 rgb(0 0 0 / 0.6);
+}
+
+.title-shadow {
+  text-shadow:
+    3px 3px 0 #2a0b5c,
+    0 0 14px rgb(178 107 255 / 0.6);
+}
+
+/* barra de progreso segmentada, estilo HP/XP */
+.pixel-bar {
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent 0 10px,
+    rgb(0 0 0 / 0.35) 10px 12px
+  );
+}
+
+@keyframes pop-in {
+  from { transform: scale(0.96); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.animate-pop-in { animation: pop-in 140ms steps(3) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-pop-in { animation: none; }
+}
