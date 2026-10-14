@@ -1,0 +1,99 @@
+@import 'tailwindcss';
+
+/* Paleta naturaleza en pixel art: tierra, madera, bosque y río */
+@theme {
+  --color-soil: #15130d;
+  --color-panel: #2a2117;
+  --color-panel-2: #362b1e;
+  --color-edge: #5a4630;
+  --color-ink: #f3ead3;
+  --color-ink-dim: #b8aa88;
+  --color-leaf: #8cc152;
+  --color-moss: #5b8a34;
+  --color-river: #5aaed0;
+  --color-sun: #e3b34a;
+  --color-berry: #d0583f;
+  --font-pixel: 'Press Start 2P', ui-monospace, monospace;
+  --font-retro: 'VT323', ui-monospace, monospace;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-soil);
+  background-image:
+    radial-gradient(circle at 20% 0%, rgb(91 138 52 / 0.22), transparent 45%),
+    radial-gradient(circle at 85% 100%, rgb(90 174 208 / 0.14), transparent 45%);
+  background-attachment: fixed;
+  color: var(--color-ink);
+  font-family: var(--font-retro);
+  font-size: 22px;
+  line-height: 1.2;
+  -webkit-font-smoothing: none;
+}
+
+/* luciérnagas pixeladas de fondo */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(1px 1px at 10% 20%, #d9f27a88 50%, transparent 51%),
+    radial-gradient(1px 1px at 30% 70%, #d9f27a66 50%, transparent 51%),
+    radial-gradient(2px 2px at 55% 15%, #d9f27a55 50%, transparent 51%),
+    radial-gradient(1px 1px at 75% 40%, #d9f27a77 50%, transparent 51%),
+    radial-gradient(2px 2px at 90% 80%, #d9f27a44 50%, transparent 51%),
+    radial-gradient(1px 1px at 45% 90%, #d9f27a66 50%, transparent 51%);
+}
+
+/* panel con borde de color y sombra pixel sólida (sin desenfoque) */
+.pixel-panel {
+  background: var(--color-panel);
+  border: 3px solid var(--panel-color, var(--color-moss));
+  box-shadow:
+    0 0 0 3px var(--color-soil),
+    6px 6px 0 0 rgb(0 0 0 / 0.55),
+    0 0 18px -4px var(--panel-color, var(--color-moss));
+}
+
+.pixel-btn {
+  font-family: var(--font-pixel);
+  border: 3px solid currentColor;
+  box-shadow: 4px 4px 0 0 rgb(0 0 0 / 0.6);
+  transition: transform 60ms, box-shadow 60ms;
+}
+.pixel-btn:active {
+  transform: translate(3px, 3px);
+  box-shadow: 1px 1px 0 0 rgb(0 0 0 / 0.6);
+}
+
+.title-shadow {
+  text-shadow:
+    3px 3px 0 #3a2410,
+    0 0 12px rgb(140 193 82 / 0.35);
+}
+
+/* barra de progreso segmentada, estilo HP/XP */
+.pixel-bar {
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent 0 10px,
+    rgb(0 0 0 / 0.35) 10px 12px
+  );
+}
+
+@keyframes pop-in {
+  from { transform: scale(0.96); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.animate-pop-in { animation: pop-in 140ms steps(3) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-pop-in { animation: none; }
+}
