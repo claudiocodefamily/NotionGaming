@@ -1,4 +1,6 @@
+import { useCategories } from './categories/useCategories'
 import { AddTaskForm } from './components/AddTaskForm'
+import { CategoriesPanel } from './components/CategoriesPanel'
 import { TaskList } from './components/TaskList'
 import { dayKey, formatLongDate } from './tasks/dates'
 import { tasksForDay } from './tasks/tasks'
@@ -6,7 +8,8 @@ import { useTasks } from './tasks/useTasks'
 import { useToday } from './tasks/useToday'
 
 export default function App() {
-  const { tasks, add, toggle, remove } = useTasks()
+  const { tasks, add, toggle, remove, clearCategory } = useTasks()
+  const categories = useCategories()
   const now = useToday()
   const today = dayKey(now)
   const todays = tasksForDay(tasks, today)
@@ -45,11 +48,24 @@ export default function App() {
         </div>
 
         <div className="mb-5">
-          <AddTaskForm onAdd={(title) => add(title, today)} />
+          <AddTaskForm
+            categories={categories.categories}
+            onAdd={(title, categoryId) => add(title, today, categoryId)}
+          />
         </div>
 
-        <TaskList tasks={todays} onToggle={toggle} onDelete={remove} />
+        <TaskList tasks={todays} categories={categories.categories} onToggle={toggle} onDelete={remove} />
       </section>
+
+      <CategoriesPanel
+        categories={categories.categories}
+        onAdd={categories.add}
+        onDelete={(c) => {
+          if (!confirm(`¿Eliminar la clasificación "${c.name}"? Sus tareas quedarán sin clasificación.`)) return
+          categories.remove(c.id)
+          clearCategory(c.id)
+        }}
+      />
     </div>
   )
 }
