@@ -24,7 +24,7 @@ export function TaskList({ tasks, onToggle, onDelete }: Props) {
         <li
           key={t.id}
           className={`animate-pop-in flex items-center gap-3 border-2 bg-panel-2 px-3 py-2 ${
-            t.done ? 'border-green/40' : 'border-edge'
+            t.done ? 'border-leaf/40' : 'border-edge'
           }`}
         >
           <button
@@ -38,7 +38,7 @@ export function TaskList({ tasks, onToggle, onDelete }: Props) {
           </button>
           <button
             onClick={() => onDelete(t.id)}
-            className="shrink-0 px-2 py-1 font-pixel text-sm text-red/70 hover:text-red"
+            className="shrink-0 px-2 py-1 font-pixel text-sm text-berry/70 hover:text-berry"
             aria-label={`Eliminar "${t.title}"`}
             title="Eliminar"
           >

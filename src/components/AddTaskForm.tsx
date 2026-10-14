@@ -17,10 +17,10 @@ export function AddTaskForm({ onAdd }: { onAdd: (title: string) => void }) {
         onChange={(e) => setTitle(e.target.value)}
         placeholder="Nueva tarea..."
         maxLength={120}
-        className="min-w-0 flex-1 border-2 border-edge bg-night px-3 py-2 text-ink outline-none placeholder:text-ink-dim/60 focus:border-cyan"
+        className="min-w-0 flex-1 border-2 border-edge bg-soil px-3 py-2 text-ink outline-none placeholder:text-ink-dim/60 focus:border-river"
         aria-label="Nueva tarea"
       />
-      <button type="submit" className="pixel-btn bg-cyan/10 px-4 py-3 text-[11px] text-cyan hover:bg-cyan/20">
+      <button type="submit" className="pixel-btn bg-river/10 px-4 py-3 text-[11px] text-river hover:bg-river/20">
         + AÑADIR
       </button>
     </form>

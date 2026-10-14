@@ -16,13 +16,13 @@ export default function App() {
   return (
     <div className="relative mx-auto max-w-2xl px-4 py-8 sm:py-12">
       <header className="mb-8 text-center">
-        <h1 className="title-shadow font-pixel text-2xl leading-snug text-purple sm:text-3xl">NOTION GAMING</h1>
-        <p className="mt-3 font-pixel text-[10px] tracking-wider text-amber">TU DIA ES UNA AVENTURA</p>
+        <h1 className="title-shadow font-pixel text-2xl leading-snug text-leaf sm:text-3xl">NOTION GAMING</h1>
+        <p className="mt-3 font-pixel text-[10px] tracking-wider text-sun">TU DIA ES UNA AVENTURA</p>
       </header>
 
-      <section className="pixel-panel p-4 sm:p-6" style={{ ['--panel-color' as string]: 'var(--color-cyan)' }}>
+      <section className="pixel-panel p-4 sm:p-6" style={{ ['--panel-color' as string]: 'var(--color-moss)' }}>
         <div className="mb-4 flex flex-wrap items-baseline justify-between gap-2">
-          <h2 className="font-pixel text-sm text-cyan">TAREAS DE HOY</h2>
+          <h2 className="font-pixel text-sm text-river">TAREAS DE HOY</h2>
           <span className="inline-block text-ink-dim first-letter:uppercase">{formatLongDate(now)}</span>
         </div>
 
@@ -34,13 +34,13 @@ export default function App() {
             </span>
           </div>
           <div
-            className="h-5 border-2 border-edge bg-night p-0.5"
+            className="h-5 border-2 border-edge bg-soil p-0.5"
             role="progressbar"
             aria-valuenow={done}
             aria-valuemax={todays.length}
             aria-label="Tareas completadas hoy"
           >
-            <div className="pixel-bar h-full bg-green transition-[width] duration-300" style={{ width: `${pct}%` }} />
+            <div className="pixel-bar h-full bg-leaf transition-[width] duration-300" style={{ width: `${pct}%` }} />
           </div>
         </div>
 
