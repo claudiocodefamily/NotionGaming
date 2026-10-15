@@ -8,6 +8,11 @@ App de tareas al estilo Notion con estética de videojuego retro (pixel art).
 - **Paso 2:** clasificaciones con color e icono (universidad, trabajo, vida diaria, freelance y las que crees).
 - Paso 3: calendario con filtro por clasificación.
 - Paso 4: cards con el número de tareas por clasificación.
+- Paso 5 (más adelante): header estilo *Keep Driving*, con un auto pixel art que avanza por distintos escenarios y paneles debajo (gasolina, kilometraje).
+  - Cada tarea cumplida hace avanzar el auto; los kilómetros son el progreso real.
+  - Modo focus como "gasolina": concentrarse llena el tanque y permite avanzar más rápido.
+  - Los kilómetros acumulados completan eventos y desbloquean lugares, autos y personalización del personaje.
+  - Primera entrega: solo el header con el auto avanzando al completar tareas.
 
 ## Ejecutarla en tu PC
 
