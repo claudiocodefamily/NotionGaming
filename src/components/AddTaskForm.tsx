@@ -5,12 +5,13 @@ import { CategoryPicker } from './CategoryPicker'
 type Props = {
   categories: Category[]
   onAdd: (title: string, categoryId: string | null) => void
+  initialCategoryId?: string | null
 }
 
-export function AddTaskForm({ categories, onAdd }: Props) {
+export function AddTaskForm({ categories, onAdd, initialCategoryId = null }: Props) {
   const [title, setTitle] = useState('')
   // se recuerda la última clasificación usada para añadir varias seguidas
-  const [categoryId, setCategoryId] = useState<string | null>(null)
+  const [categoryId, setCategoryId] = useState<string | null>(initialCategoryId)
   const selected = categories.some((c) => c.id === categoryId) ? categoryId : null
 
   const submit = (e: FormEvent) => {

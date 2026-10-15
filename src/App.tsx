@@ -1,5 +1,6 @@
 import { useCategories } from './categories/useCategories'
 import { AddTaskForm } from './components/AddTaskForm'
+import { CalendarPanel } from './components/CalendarPanel'
 import { CategoriesPanel } from './components/CategoriesPanel'
 import { Tabs, type TabItem } from './components/Tabs'
 import { TaskList } from './components/TaskList'
@@ -9,10 +10,11 @@ import { useTasks } from './tasks/useTasks'
 import { useToday } from './tasks/useToday'
 import { useStoredTab } from './useStoredTab'
 
-type Tab = 'tareas' | 'clasificaciones'
+type Tab = 'tareas' | 'calendario' | 'clasificaciones'
 
 const TABS: TabItem<Tab>[] = [
   { id: 'tareas', label: 'TAREAS', icon: '📋', color: 'var(--color-moss)' },
+  { id: 'calendario', label: 'CALENDARIO', icon: '📅', color: 'var(--color-river)' },
   { id: 'clasificaciones', label: 'CLASIFICACIONES', icon: '🏷️', color: 'var(--color-sun)' },
 ]
 
@@ -24,7 +26,7 @@ export default function App() {
   const todays = tasksForDay(tasks, today)
   const done = todays.filter((t) => t.done).length
   const pct = todays.length ? Math.round((done / todays.length) * 100) : 0
-  const [tab, setTab] = useStoredTab<Tab>(['tareas', 'clasificaciones'], 'tareas')
+  const [tab, setTab] = useStoredTab<Tab>(['tareas', 'calendario', 'clasificaciones'], 'tareas')
 
   return (
     <div className="relative mx-auto max-w-2xl px-4 py-8 sm:py-12">
@@ -75,6 +77,17 @@ export default function App() {
 
           <TaskList tasks={todays} categories={categories.categories} onToggle={toggle} onDelete={remove} />
         </section>
+      )}
+
+      {tab === 'calendario' && (
+        <CalendarPanel
+          tasks={tasks}
+          categories={categories.categories}
+          today={today}
+          onAdd={add}
+          onToggle={toggle}
+          onDelete={remove}
+        />
       )}
 
       {tab === 'clasificaciones' && (
