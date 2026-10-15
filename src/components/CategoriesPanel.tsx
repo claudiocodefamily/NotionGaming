@@ -26,7 +26,13 @@ export function CategoriesPanel({ categories, onAdd, onDelete }: Props) {
   }
 
   return (
-    <section className="pixel-panel mt-8 p-4 sm:p-6" style={{ ['--panel-color' as string]: 'var(--color-edge)' }}>
+    <section
+      id="panel-clasificaciones"
+      role="tabpanel"
+      aria-labelledby="tab-clasificaciones"
+      className="pixel-panel p-4 sm:p-6"
+      style={{ ['--panel-color' as string]: 'var(--color-sun)' }}
+    >
       <h2 className="mb-4 font-pixel text-sm text-sun">CLASIFICACIONES</h2>
 
       {categories.length === 0 ? (
