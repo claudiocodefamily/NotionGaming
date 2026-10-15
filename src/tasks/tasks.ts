@@ -5,12 +5,14 @@ export type Task = {
   date: string
   done: boolean
   createdAt: number
+  /** Clasificación de la tarea, o null si no tiene. */
+  categoryId: string | null
 }
 
-export function createTask(title: string, date: string, now = Date.now()): Task {
+export function createTask(title: string, date: string, categoryId: string | null = null, now = Date.now()): Task {
   const id =
     typeof crypto !== 'undefined' && 'randomUUID' in crypto ? crypto.randomUUID() : `${now}-${Math.random()}`
-  return { id, title: title.trim(), date, done: false, createdAt: now }
+  return { id, title: title.trim(), date, done: false, createdAt: now, categoryId }
 }
 
 export function tasksForDay(tasks: Task[], date: string): Task[] {
@@ -23,4 +25,9 @@ export function toggleTask(tasks: Task[], id: string): Task[] {
 
 export function deleteTask(tasks: Task[], id: string): Task[] {
   return tasks.filter((t) => t.id !== id)
+}
+
+/** Deja sin clasificación las tareas de una clasificación que se elimina. */
+export function clearCategory(tasks: Task[], categoryId: string): Task[] {
+  return tasks.map((t) => (t.categoryId === categoryId ? { ...t, categoryId: null } : t))
 }
