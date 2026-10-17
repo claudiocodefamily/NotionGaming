@@ -9,3 +9,9 @@ export function dayKey(date: Date): string {
 export function formatLongDate(date: Date): string {
   return date.toLocaleDateString('es', { weekday: 'long', day: 'numeric', month: 'long' })
 }
+
+/** Convierte una clave YYYY-MM-DD en fecha local. */
+export function parseDayKey(key: string): Date {
+  const [y, m, d] = key.split('-').map(Number)
+  return new Date(y, m - 1, d)
+}

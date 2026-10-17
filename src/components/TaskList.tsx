@@ -8,17 +8,16 @@ type Props = {
   categories: Category[]
   onToggle: (id: string) => void
   onDelete: (id: string) => void
+  emptyMessage?: string
 }
 
-export function TaskList({ tasks, categories, onToggle, onDelete }: Props) {
+export function TaskList({ tasks, categories, onToggle, onDelete, emptyMessage }: Props) {
   const byId = new Map(categories.map((c) => [c.id, c]))
 
   if (tasks.length === 0) {
     return (
-      <p className="py-6 text-center text-ink-dim">
-        No hay tareas para hoy.
-        <br />
-        ¡Añade tu primera misión!
+      <p className="py-6 text-center whitespace-pre-line text-ink-dim">
+        {emptyMessage ?? 'No hay tareas para hoy.\n¡Añade tu primera misión!'}
       </p>
     )
   }
