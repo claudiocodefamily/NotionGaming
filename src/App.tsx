@@ -1,4 +1,5 @@
 import { useCategories } from './categories/useCategories'
+import { Dashboard } from './dashboard/Dashboard'
 import { CalendarPanel } from './components/CalendarPanel'
 import { CategoriesPanel } from './components/CategoriesPanel'
 import { NewTaskPanel } from './components/NewTaskPanel'
@@ -26,10 +27,11 @@ export default function App() {
 
   return (
     <div className="relative mx-auto max-w-5xl px-4 py-8 sm:py-12">
-      <header className="mb-8 text-center">
-        <h1 className="title-shadow font-pixel text-2xl leading-snug text-leaf sm:text-3xl">NOTION GAMING</h1>
-        <p className="mt-3 font-pixel text-[10px] tracking-wider text-sun">TU DIA ES UNA AVENTURA</p>
+      <header className="mb-5">
+        <h1 className="title-shadow font-pixel text-lg leading-snug text-leaf sm:text-xl">CONDUCE UN POCO</h1>
       </header>
+
+      <Dashboard tasks={tasks} />
 
       <Tabs tabs={TABS} active={tab} onChange={setTab} />
 
