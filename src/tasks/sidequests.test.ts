@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest'
 import { tasksByDay } from '../calendar/calendar'
-import { pendingGroups, shortDay } from './pending'
 import { addSubtask, createTask, scheduleTask, sideQuests, subtasksOf, tasksForDay } from './tasks'
 
 describe('misiones secundarias', () => {
@@ -22,13 +21,5 @@ describe('misiones secundarias', () => {
     tasks = scheduleTask(tasks, quest.id, null)
     expect(sideQuests(tasks)).toHaveLength(1)
     expect(subtasksOf(tasks, quest.id)[0].date).toBeNull()
-  })
-
-  it('aparecen al final de su clasificación en pendientes, como Misión', () => {
-    const quest = createTask('Algún día', null, 'trabajo', 1)
-    const dated = createTask('Reunión', '2026-10-25', 'trabajo', 2)
-    const [group] = pendingGroups([quest, dated], [{ id: 'trabajo', name: 'Trabajo', color: '#000', icon: '💼' }])
-    expect(group.items.map((i) => i.task.title)).toEqual(['Reunión', 'Algún día'])
-    expect(shortDay(null, '2026-10-17')).toEqual({ label: 'Misión', overdue: false })
   })
 })

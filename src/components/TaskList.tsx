@@ -13,14 +13,10 @@ type Props = {
   onToggle: (id: string) => void
   onDelete: (id: string) => void
   onAddSubtask: (parentId: string, title: string) => void
-  /** Botón opcional para mover la tarea (a hoy, o a misiones secundarias). */
-  move?: MoveAction
   emptyMessage?: string
 }
 
-type MoveAction = { icon: string; label: string; onMove: (id: string) => void }
-
-export function TaskList({ tasks, allTasks, categories, onToggle, onDelete, onAddSubtask, move, emptyMessage }: Props) {
+export function TaskList({ tasks, allTasks, categories, onToggle, onDelete, onAddSubtask, emptyMessage }: Props) {
   const byId = new Map(categories.map((c) => [c.id, c]))
 
   if (tasks.length === 0) {
@@ -42,7 +38,6 @@ export function TaskList({ tasks, allTasks, categories, onToggle, onDelete, onAd
           onToggle={onToggle}
           onDelete={onDelete}
           onAddSubtask={onAddSubtask}
-          move={move}
         />
       ))}
     </ul>
@@ -56,10 +51,9 @@ type ItemProps = {
   onToggle: (id: string) => void
   onDelete: (id: string) => void
   onAddSubtask: (parentId: string, title: string) => void
-  move?: MoveAction
 }
 
-function TaskItem({ task, subtasks, category, onToggle, onDelete, onAddSubtask, move }: ItemProps) {
+function TaskItem({ task, subtasks, category, onToggle, onDelete, onAddSubtask }: ItemProps) {
   const [adding, setAdding] = useState(false)
   const [title, setTitle] = useState('')
   const subDone = subtasks.filter((s) => s.done).length
@@ -102,16 +96,6 @@ function TaskItem({ task, subtasks, category, onToggle, onDelete, onAddSubtask, 
         >
           +
         </button>
-        {move && (
-          <button
-            onClick={() => move.onMove(task.id)}
-            className="shrink-0 px-1 py-1 text-[18px] opacity-70 hover:opacity-100"
-            aria-label={`${move.label}: "${task.title}"`}
-            title={move.label}
-          >
-            {move.icon}
-          </button>
-        )}
         <button
           onClick={() => {
             if (subtasks.length > 0 && !confirm(`¿Eliminar "${task.title}" y sus ${subtasks.length} subtareas?`)) return

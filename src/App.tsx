@@ -1,12 +1,10 @@
 import { useCategories } from './categories/useCategories'
-import { AddTaskForm } from './components/AddTaskForm'
 import { CalendarPanel } from './components/CalendarPanel'
 import { CategoriesPanel } from './components/CategoriesPanel'
-import { PendingColumn } from './components/PendingColumn'
+import { NewTaskPanel } from './components/NewTaskPanel'
 import { Tabs, type TabItem } from './components/Tabs'
-import { TaskList } from './components/TaskList'
-import { dayKey, formatLongDate } from './tasks/dates'
-import { sideQuests, tasksForDay } from './tasks/tasks'
+import { TaskColumn } from './components/TaskColumn'
+import { dayKey } from './tasks/dates'
 import { useTasks } from './tasks/useTasks'
 import { useToday } from './tasks/useToday'
 import { useStoredTab } from './useStoredTab'
@@ -24,10 +22,6 @@ export default function App() {
   const categories = useCategories()
   const now = useToday()
   const today = dayKey(now)
-  const todays = tasksForDay(tasks, today)
-  const done = todays.filter((t) => t.done).length
-  const quests = sideQuests(tasks)
-  const pct = todays.length ? Math.round((done / todays.length) * 100) : 0
   const [tab, setTab] = useStoredTab<Tab>(['tareas', 'calendario', 'clasificaciones'], 'tareas')
 
   return (
@@ -47,78 +41,19 @@ export default function App() {
           className="pixel-panel p-4 sm:p-6"
           style={{ ['--panel-color' as string]: 'var(--color-moss)' }}
         >
-          <div className="grid gap-6 lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)]">
-            <div className="border-b-2 border-dashed border-edge pb-4 lg:border-r-2 lg:border-b-0 lg:pr-6 lg:pb-0">
-              <PendingColumn tasks={tasks} categories={categories.categories} today={today} onToggle={toggle} />
-            </div>
-            <div>
-              <div className="mb-4 flex flex-wrap items-baseline justify-between gap-2">
-                <h2 className="font-pixel text-sm text-river">TAREAS DE HOY</h2>
-                <span className="inline-block text-ink-dim first-letter:uppercase">{formatLongDate(now)}</span>
-              </div>
-
-              <div className="mb-5">
-                <div className="mb-1 flex justify-between text-ink-dim">
-                  <span>Progreso</span>
-                  <span>
-                    {done}/{todays.length}
-                  </span>
-                </div>
-                <div
-                  className="h-5 border-2 border-edge bg-soil p-0.5"
-                  role="progressbar"
-                  aria-valuenow={done}
-                  aria-valuemax={todays.length}
-                  aria-label="Tareas completadas hoy"
-                >
-                  <div
-                    className="pixel-bar h-full bg-leaf transition-[width] duration-300"
-                    style={{ width: `${pct}%` }}
-                  />
-                </div>
-              </div>
-
-              <div className="mb-5">
-                <AddTaskForm
-                  categories={categories.categories}
-                  onAdd={(title, categoryId) => add(title, today, categoryId)}
-                />
-              </div>
-
-              <TaskList
-                tasks={todays}
-                allTasks={tasks}
+          <div className="grid gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
+            <div className="border-b-2 border-dashed border-edge pb-6 lg:border-r-2 lg:border-b-0 lg:pr-6 lg:pb-0">
+              <TaskColumn
+                tasks={tasks}
                 categories={categories.categories}
+                today={today}
                 onToggle={toggle}
                 onDelete={remove}
                 onAddSubtask={addSubtask}
-                move={{ icon: '🗡️', label: 'Pasar a misiones secundarias', onMove: (id) => schedule(id, null) }}
+                onSchedule={schedule}
               />
-
-              <div className="mt-8 border-t-2 border-dashed border-edge pt-6">
-                <div className="mb-4 flex flex-wrap items-baseline justify-between gap-2">
-                  <h2 className="font-pixel text-sm text-sun">🗡️ MISIONES SECUNDARIAS</h2>
-                  <span className="text-ink-dim">Sin fecha · 📅 la pasa a hoy</span>
-                </div>
-                <div className="mb-5">
-                  <AddTaskForm
-                    categories={categories.categories}
-                    onAdd={(title, categoryId) => add(title, null, categoryId)}
-                    placeholder="Nueva misión..."
-                  />
-                </div>
-                <TaskList
-                  tasks={quests}
-                  allTasks={tasks}
-                  categories={categories.categories}
-                  onToggle={toggle}
-                  onDelete={remove}
-                  onAddSubtask={addSubtask}
-                  move={{ icon: '📅', label: 'Pasar a hoy', onMove: (id) => schedule(id, today) }}
-                  emptyMessage={'Sin misiones secundarias.\nApunta aquí lo que harás algún día.'}
-                />
-              </div>
             </div>
+            <NewTaskPanel tasks={tasks} categories={categories.categories} today={today} onAdd={add} />
           </div>
         </section>
       )}

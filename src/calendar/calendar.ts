@@ -41,3 +41,14 @@ export function tasksByDay(tasks: Task[], filter: CategoryFilter): Map<string, T
   }
   return map
 }
+
+/** Iniciales de la semana que empieza en sábado. */
+export const WEEK_SAT = ['Sáb', 'Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie']
+
+/** Los 7 días (YYYY-MM-DD) de la semana de sábado a viernes que contiene `date`. */
+export function weekOf(date: Date): string[] {
+  const offset = (date.getDay() + 1) % 7
+  return Array.from({ length: 7 }, (_, i) =>
+    dayKey(new Date(date.getFullYear(), date.getMonth(), date.getDate() - offset + i)),
+  )
+}
