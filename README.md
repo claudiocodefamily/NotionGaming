@@ -8,6 +8,7 @@ App de tareas al estilo Notion con estética de videojuego retro (pixel art).
 - Paso 2: clasificaciones con color e icono (universidad, trabajo, vida diaria, freelance y las que crees).
 - Paso 3: calendario mensual con filtro por clasificación; permite ver y añadir tareas de cualquier día.
 - **Extra:** tareas macro con subtareas (la macro se completa sola al terminar sus subtareas) y columna de pendientes agrupada por clasificación, desplegable.
+- **Extra:** misiones secundarias, tareas sin fecha que se pasan a hoy con un clic (y cualquier tarea de hoy puede volver a ser misión).
 - Paso 4: cards con el número de tareas por clasificación.
 - Paso 5 (más adelante): header estilo *Keep Driving*, con un auto pixel art que avanza por distintos escenarios y paneles debajo (gasolina, kilometraje).
   - Cada tarea cumplida hace avanzar el auto; los kilómetros son el progreso real.

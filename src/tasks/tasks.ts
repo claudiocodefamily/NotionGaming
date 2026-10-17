@@ -1,8 +1,8 @@
 export type Task = {
   id: string
   title: string
-  /** Día al que pertenece la tarea (YYYY-MM-DD). */
-  date: string
+  /** Día al que pertenece la tarea (YYYY-MM-DD), o null si es una misión secundaria sin fecha. */
+  date: string | null
   done: boolean
   createdAt: number
   /** Clasificación de la tarea, o null si no tiene. */
@@ -15,7 +15,12 @@ function newId(now: number): string {
   return typeof crypto !== 'undefined' && 'randomUUID' in crypto ? crypto.randomUUID() : `${now}-${Math.random()}`
 }
 
-export function createTask(title: string, date: string, categoryId: string | null = null, now = Date.now()): Task {
+export function createTask(
+  title: string,
+  date: string | null,
+  categoryId: string | null = null,
+  now = Date.now(),
+): Task {
   return { id: newId(now), title: title.trim(), date, done: false, createdAt: now, categoryId, parentId: null }
 }
 
@@ -33,6 +38,20 @@ export function tasksForDay(tasks: Task[], date: string): Task[] {
   return tasks
     .filter((t) => t.date === date && t.parentId === null)
     .sort((a, b) => Number(a.done) - Number(b.done) || a.createdAt - b.createdAt)
+}
+
+/** Misiones secundarias: tareas principales sin fecha, pendientes primero. */
+export function sideQuests(tasks: Task[]): Task[] {
+  return tasks
+    .filter((t) => t.date === null && t.parentId === null)
+    .sort((a, b) => Number(a.done) - Number(b.done) || a.createdAt - b.createdAt)
+}
+
+/** Cambia el día de una tarea principal (null la vuelve misión secundaria); sus subtareas la siguen. */
+export function scheduleTask(tasks: Task[], id: string, date: string | null): Task[] {
+  const task = tasks.find((t) => t.id === id)
+  if (!task || task.parentId !== null) return tasks
+  return tasks.map((t) => (t.id === id || t.parentId === id ? { ...t, date } : t))
 }
 
 /** Una tarea macro se completa sola cuando todas sus subtareas están hechas. */

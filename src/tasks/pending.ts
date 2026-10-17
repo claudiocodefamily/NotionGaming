@@ -5,6 +5,14 @@ import type { Task } from './tasks'
 export type PendingItem = { task: Task; subtasks: Task[]; subDone: number; subTotal: number }
 export type PendingGroup = { category: Category | null; items: PendingItem[] }
 
+/** Ordena por día, con las misiones secundarias (sin fecha) al final. */
+function compareDates(a: string | null, b: string | null): number {
+  if (a === b) return 0
+  if (a === null) return 1
+  if (b === null) return -1
+  return a.localeCompare(b)
+}
+
 /**
  * Tareas principales sin terminar (de cualquier día) agrupadas por clasificación,
  * en el orden de las clasificaciones y con "sin clasificación" al final.
@@ -13,7 +21,7 @@ export type PendingGroup = { category: Category | null; items: PendingItem[] }
 export function pendingGroups(tasks: Task[], categories: Category[]): PendingGroup[] {
   const pending = tasks
     .filter((t) => t.parentId === null && !t.done)
-    .sort((a, b) => a.date.localeCompare(b.date) || a.createdAt - b.createdAt)
+    .sort((a, b) => compareDates(a.date, b.date) || a.createdAt - b.createdAt)
 
   const toItem = (task: Task): PendingItem => {
     const subs = tasks.filter((t) => t.parentId === task.id).sort((a, b) => a.createdAt - b.createdAt)
@@ -34,8 +42,9 @@ export function pendingGroups(tasks: Task[], categories: Category[]): PendingGro
   return groups.filter((g) => g.items.length > 0)
 }
 
-/** Etiqueta corta del día relativa a hoy: Hoy, Mañana, Ayer o "17 oct". */
-export function shortDay(key: string, today: string): { label: string; overdue: boolean } {
+/** Etiqueta corta del día relativa a hoy: Hoy, Mañana, Ayer, "17 oct" o Misión si no tiene fecha. */
+export function shortDay(key: string | null, today: string): { label: string; overdue: boolean } {
+  if (key === null) return { label: 'Misión', overdue: false }
   const t = parseDayKey(today)
   const rel = (n: number) => dayKey(new Date(t.getFullYear(), t.getMonth(), t.getDate() + n))
   const overdue = key < today

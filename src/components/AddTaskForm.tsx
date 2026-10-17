@@ -6,9 +6,10 @@ type Props = {
   categories: Category[]
   onAdd: (title: string, categoryId: string | null) => void
   initialCategoryId?: string | null
+  placeholder?: string
 }
 
-export function AddTaskForm({ categories, onAdd, initialCategoryId = null }: Props) {
+export function AddTaskForm({ categories, onAdd, initialCategoryId = null, placeholder = 'Nueva tarea...' }: Props) {
   const [title, setTitle] = useState('')
   // se recuerda la última clasificación usada para añadir varias seguidas
   const [categoryId, setCategoryId] = useState<string | null>(initialCategoryId)
@@ -27,10 +28,10 @@ export function AddTaskForm({ categories, onAdd, initialCategoryId = null }: Pro
         <input
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          placeholder="Nueva tarea..."
+          placeholder={placeholder}
           maxLength={120}
           className="min-w-0 flex-1 border-2 border-edge bg-soil px-3 py-2 text-ink outline-none placeholder:text-ink-dim/60 focus:border-river"
-          aria-label="Nueva tarea"
+          aria-label={placeholder.replace('...', '')}
         />
         <button type="submit" className="pixel-btn bg-river/10 px-4 py-3 text-[11px] text-river hover:bg-river/20">
           + AÑADIR

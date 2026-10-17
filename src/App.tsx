@@ -6,7 +6,7 @@ import { PendingColumn } from './components/PendingColumn'
 import { Tabs, type TabItem } from './components/Tabs'
 import { TaskList } from './components/TaskList'
 import { dayKey, formatLongDate } from './tasks/dates'
-import { tasksForDay } from './tasks/tasks'
+import { sideQuests, tasksForDay } from './tasks/tasks'
 import { useTasks } from './tasks/useTasks'
 import { useToday } from './tasks/useToday'
 import { useStoredTab } from './useStoredTab'
@@ -20,12 +20,13 @@ const TABS: TabItem<Tab>[] = [
 ]
 
 export default function App() {
-  const { tasks, add, addSubtask, toggle, remove, clearCategory } = useTasks()
+  const { tasks, add, addSubtask, schedule, toggle, remove, clearCategory } = useTasks()
   const categories = useCategories()
   const now = useToday()
   const today = dayKey(now)
   const todays = tasksForDay(tasks, today)
   const done = todays.filter((t) => t.done).length
+  const quests = sideQuests(tasks)
   const pct = todays.length ? Math.round((done / todays.length) * 100) : 0
   const [tab, setTab] = useStoredTab<Tab>(['tareas', 'calendario', 'clasificaciones'], 'tareas')
 
@@ -91,7 +92,32 @@ export default function App() {
                 onToggle={toggle}
                 onDelete={remove}
                 onAddSubtask={addSubtask}
+                move={{ icon: '🗡️', label: 'Pasar a misiones secundarias', onMove: (id) => schedule(id, null) }}
               />
+
+              <div className="mt-8 border-t-2 border-dashed border-edge pt-6">
+                <div className="mb-4 flex flex-wrap items-baseline justify-between gap-2">
+                  <h2 className="font-pixel text-sm text-sun">🗡️ MISIONES SECUNDARIAS</h2>
+                  <span className="text-ink-dim">Sin fecha · 📅 la pasa a hoy</span>
+                </div>
+                <div className="mb-5">
+                  <AddTaskForm
+                    categories={categories.categories}
+                    onAdd={(title, categoryId) => add(title, null, categoryId)}
+                    placeholder="Nueva misión..."
+                  />
+                </div>
+                <TaskList
+                  tasks={quests}
+                  allTasks={tasks}
+                  categories={categories.categories}
+                  onToggle={toggle}
+                  onDelete={remove}
+                  onAddSubtask={addSubtask}
+                  move={{ icon: '📅', label: 'Pasar a hoy', onMove: (id) => schedule(id, today) }}
+                  emptyMessage={'Sin misiones secundarias.\nApunta aquí lo que harás algún día.'}
+                />
+              </div>
             </div>
           </div>
         </section>
