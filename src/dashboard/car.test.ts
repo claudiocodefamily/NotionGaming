@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { addSubtask, createTask, subtasksOf, toggleTask } from '../tasks/tasks'
-import { kilometers } from './dashboard'
+import { kilometers } from './car'
 
 describe('kilometers', () => {
   it('suma 1 km por cada tarea o subtarea completada', () => {

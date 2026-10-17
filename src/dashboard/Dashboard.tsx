@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import type { Task } from '../tasks/tasks'
-import { FUEL_SEGMENTS, kilometers, STATIONS } from './dashboard'
+import { FUEL_SEGMENTS, kilometers, STATIONS } from './car'
 import { useStored } from '../useStored'
 
 /** Pantalla del viaje (por ahora negra) y tablero del auto debajo. */
