@@ -15,11 +15,12 @@ type Props = {
   categories: Category[]
   today: string
   onAdd: (title: string, date: string, categoryId: string | null) => void
+  onAddSubtask: (parentId: string, title: string) => void
   onToggle: (id: string) => void
   onDelete: (id: string) => void
 }
 
-export function CalendarPanel({ tasks, categories, today, onAdd, onToggle, onDelete }: Props) {
+export function CalendarPanel({ tasks, categories, today, onAdd, onAddSubtask, onToggle, onDelete }: Props) {
   const todayDate = parseDayKey(today)
   const [view, setView] = useState({ year: todayDate.getFullYear(), month: todayDate.getMonth() })
   const [selected, setSelected] = useState(today)
@@ -120,7 +121,9 @@ export function CalendarPanel({ tasks, categories, today, onAdd, onToggle, onDel
                     />
                   ))}
                   {dayTasks.length > MAX_MARKS && (
-                    <span className="hidden text-[14px] leading-none text-ink-dim sm:inline">+{dayTasks.length - MAX_MARKS}</span>
+                    <span className="hidden text-[14px] leading-none text-ink-dim sm:inline">
+                      +{dayTasks.length - MAX_MARKS}
+                    </span>
                   )}
                   {pending === 0 && <span className="sr-only">todas completadas</span>}
                 </span>
@@ -152,7 +155,9 @@ export function CalendarPanel({ tasks, categories, today, onAdd, onToggle, onDel
         </div>
         <TaskList
           tasks={selectedTasks}
+          allTasks={tasks}
           categories={categories}
+          onAddSubtask={onAddSubtask}
           onToggle={onToggle}
           onDelete={onDelete}
           emptyMessage={filter === 'all' ? 'No hay tareas este día.' : 'No hay tareas de esta clasificación este día.'}

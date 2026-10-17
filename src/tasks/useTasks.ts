@@ -1,13 +1,19 @@
 import { useEffect, useState } from 'react'
-import { clearCategory, createTask, deleteTask, toggleTask, type Task } from './tasks'
+import { addSubtask, clearCategory, createTask, deleteTask, scheduleTask, toggleTask, type Task } from './tasks'
 
 const STORAGE_KEY = 'notiongaming:tasks:v1'
 
 function load(): Task[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    // las tareas del paso 1 no tenían clasificación
-    return raw ? (JSON.parse(raw) as Task[]).map((t) => ({ ...t, categoryId: t.categoryId ?? null })) : []
+    // las tareas antiguas no tenían clasificación ni tarea macro
+    return raw
+      ? (JSON.parse(raw) as Task[]).map((t) => ({
+          ...t,
+          categoryId: t.categoryId ?? null,
+          parentId: t.parentId ?? null,
+        }))
+      : []
   } catch {
     return []
   }
@@ -27,8 +33,10 @@ export function useTasks() {
 
   return {
     tasks,
-    add: (title: string, date: string, categoryId: string | null) =>
+    add: (title: string, date: string | null, categoryId: string | null) =>
       setTasks((ts) => [...ts, createTask(title, date, categoryId)]),
+    addSubtask: (parentId: string, title: string) => setTasks((ts) => addSubtask(ts, parentId, title)),
+    schedule: (id: string, date: string | null) => setTasks((ts) => scheduleTask(ts, id, date)),
     toggle: (id: string) => setTasks((ts) => toggleTask(ts, id)),
     remove: (id: string) => setTasks((ts) => deleteTask(ts, id)),
     clearCategory: (categoryId: string) => setTasks((ts) => clearCategory(ts, categoryId)),

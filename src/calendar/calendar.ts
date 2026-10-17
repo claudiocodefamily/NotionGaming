@@ -30,14 +30,25 @@ export function matchesFilter(task: Task, filter: CategoryFilter): boolean {
   return task.categoryId === filter
 }
 
-/** Agrupa las tareas filtradas por día. */
+/** Agrupa por día las tareas principales (sin subtareas ni misiones sin fecha) que pasan el filtro. */
 export function tasksByDay(tasks: Task[], filter: CategoryFilter): Map<string, Task[]> {
   const map = new Map<string, Task[]>()
   for (const t of tasks) {
-    if (!matchesFilter(t, filter)) continue
+    if (t.parentId !== null || t.date === null || !matchesFilter(t, filter)) continue
     const list = map.get(t.date)
     if (list) list.push(t)
     else map.set(t.date, [t])
   }
   return map
+}
+
+/** Iniciales de la semana que empieza en sábado. */
+export const WEEK_SAT = ['Sáb', 'Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie']
+
+/** Los 7 días (YYYY-MM-DD) de la semana de sábado a viernes que contiene `date`. */
+export function weekOf(date: Date): string[] {
+  const offset = (date.getDay() + 1) % 7
+  return Array.from({ length: 7 }, (_, i) =>
+    dayKey(new Date(date.getFullYear(), date.getMonth(), date.getDate() - offset + i)),
+  )
 }

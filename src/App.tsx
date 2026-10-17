@@ -1,11 +1,11 @@
 import { useCategories } from './categories/useCategories'
-import { AddTaskForm } from './components/AddTaskForm'
+import { Dashboard } from './dashboard/Dashboard'
 import { CalendarPanel } from './components/CalendarPanel'
 import { CategoriesPanel } from './components/CategoriesPanel'
+import { NewTaskPanel } from './components/NewTaskPanel'
 import { Tabs, type TabItem } from './components/Tabs'
-import { TaskList } from './components/TaskList'
-import { dayKey, formatLongDate } from './tasks/dates'
-import { tasksForDay } from './tasks/tasks'
+import { TaskColumn } from './components/TaskColumn'
+import { dayKey } from './tasks/dates'
 import { useTasks } from './tasks/useTasks'
 import { useToday } from './tasks/useToday'
 import { useStoredTab } from './useStoredTab'
@@ -19,21 +19,19 @@ const TABS: TabItem<Tab>[] = [
 ]
 
 export default function App() {
-  const { tasks, add, toggle, remove, clearCategory } = useTasks()
+  const { tasks, add, addSubtask, schedule, toggle, remove, clearCategory } = useTasks()
   const categories = useCategories()
   const now = useToday()
   const today = dayKey(now)
-  const todays = tasksForDay(tasks, today)
-  const done = todays.filter((t) => t.done).length
-  const pct = todays.length ? Math.round((done / todays.length) * 100) : 0
   const [tab, setTab] = useStoredTab<Tab>(['tareas', 'calendario', 'clasificaciones'], 'tareas')
 
   return (
-    <div className="relative mx-auto max-w-2xl px-4 py-8 sm:py-12">
-      <header className="mb-8 text-center">
-        <h1 className="title-shadow font-pixel text-2xl leading-snug text-leaf sm:text-3xl">NOTION GAMING</h1>
-        <p className="mt-3 font-pixel text-[10px] tracking-wider text-sun">TU DIA ES UNA AVENTURA</p>
+    <div className="relative mx-auto max-w-5xl px-4 py-8 sm:py-12">
+      <header className="mb-5">
+        <h1 className="title-shadow font-pixel text-lg leading-snug text-leaf sm:text-xl">CONDUCE UN POCO</h1>
       </header>
+
+      <Dashboard tasks={tasks} />
 
       <Tabs tabs={TABS} active={tab} onChange={setTab} />
 
@@ -45,37 +43,20 @@ export default function App() {
           className="pixel-panel p-4 sm:p-6"
           style={{ ['--panel-color' as string]: 'var(--color-moss)' }}
         >
-          <div className="mb-4 flex flex-wrap items-baseline justify-between gap-2">
-            <h2 className="font-pixel text-sm text-river">TAREAS DE HOY</h2>
-            <span className="inline-block text-ink-dim first-letter:uppercase">{formatLongDate(now)}</span>
-          </div>
-
-          <div className="mb-5">
-            <div className="mb-1 flex justify-between text-ink-dim">
-              <span>Progreso</span>
-              <span>
-                {done}/{todays.length}
-              </span>
+          <div className="grid gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
+            <div className="border-b-2 border-dashed border-edge pb-6 lg:border-r-2 lg:border-b-0 lg:pr-6 lg:pb-0">
+              <TaskColumn
+                tasks={tasks}
+                categories={categories.categories}
+                today={today}
+                onToggle={toggle}
+                onDelete={remove}
+                onAddSubtask={addSubtask}
+                onSchedule={schedule}
+              />
             </div>
-            <div
-              className="h-5 border-2 border-edge bg-soil p-0.5"
-              role="progressbar"
-              aria-valuenow={done}
-              aria-valuemax={todays.length}
-              aria-label="Tareas completadas hoy"
-            >
-              <div className="pixel-bar h-full bg-leaf transition-[width] duration-300" style={{ width: `${pct}%` }} />
-            </div>
+            <NewTaskPanel tasks={tasks} categories={categories.categories} today={today} onAdd={add} />
           </div>
-
-          <div className="mb-5">
-            <AddTaskForm
-              categories={categories.categories}
-              onAdd={(title, categoryId) => add(title, today, categoryId)}
-            />
-          </div>
-
-          <TaskList tasks={todays} categories={categories.categories} onToggle={toggle} onDelete={remove} />
         </section>
       )}
 
@@ -85,6 +66,7 @@ export default function App() {
           categories={categories.categories}
           today={today}
           onAdd={add}
+          onAddSubtask={addSubtask}
           onToggle={toggle}
           onDelete={remove}
         />
